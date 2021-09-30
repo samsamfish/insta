@@ -1,0 +1,33 @@
+type Comment @model @auth(rules: [{allow: public}]) @key(name: "byTimelineItem", fields: ["timelineitemID"]) {
+  id: ID!
+  body: String
+  user: User @connection
+  timelineitemID: ID
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  username: String
+  profilePic: String
+}
+
+enum ContentType {
+  IMAGE
+  VIDEO
+}
+
+type Content @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  source: String
+  type: ContentType
+}
+
+type TimelineItem @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  description: String
+  author: User @connection
+  content: Content @connection
+  postTime: AWSDateTime
+  Comments: [Comment] @connection(keyName: "byTimelineItem", fields: ["id"])
+}
+ 
